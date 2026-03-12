@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">RouletteApp</string>
+    <string name="open_drawer">Открыть меню</string>
+    <string name="close_drawer">Закрыть меню</string>
+    <string name="about">О программе</string>
+    <string name="luck_roulette">Рулетка удачи</string>
 </resources>

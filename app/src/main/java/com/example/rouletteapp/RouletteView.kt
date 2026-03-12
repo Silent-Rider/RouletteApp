@@ -54,7 +54,6 @@ class RouletteView @JvmOverloads constructor(
         val width = width.toFloat()
         val height = height.toFloat()
 
-        // Защита от отрисовки до получения размеров
         if (width <= 0 || height <= 0) return
 
         val centerX = width / 2
@@ -62,7 +61,6 @@ class RouletteView @JvmOverloads constructor(
         val radius = minOf(width, height) / 2 - 10
 
         canvas.withTranslation(centerX, centerY) {
-            // Пока угол поворота 0 (статика). Потом сюда подставим currentRotation
             canvas.rotate(360f / sectorsCount * 1.5f)
 
             val sectorAngle = 360f / sectorsCount
