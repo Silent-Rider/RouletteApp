@@ -4,4 +4,5 @@
     <string name="close_drawer">Закрыть меню</string>
     <string name="about">О программе</string>
     <string name="luck_roulette">Рулетка удачи</string>
+    <string name="spin">Крутить</string>
 </resources>

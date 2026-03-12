@@ -18,8 +18,7 @@ class RouletteView @JvmOverloads constructor(
 ) : View(context, attrs, defStyleAttr) {
 
     private val sectorsCount = 8
-    private val numbers = (1..sectorsCount).toList()
-    val icons = listOf("💰", "🍌", "🚀", "🎲", "🍒", "💎", "\uD83C\uDF54", "\uD83C\uDFAE")
+    private val icons = listOf("💰", "🍌", "🚀", "🎲", "🍒", "💎", "\uD83C\uDF54", "\uD83C\uDFAE")
     private val sectorColors = listOf(
         "#FF0055".toColorInt(), // Розовый
         "#00FFAA".toColorInt(), // Мятный
@@ -30,19 +29,17 @@ class RouletteView @JvmOverloads constructor(
         "#00FF00".toColorInt(), // Зеленый
         "#FF00CC".toColorInt()  // Маджента
     )
-    private val dividerColor = "#DEB887".toColorInt()
-    private val textColor = Color.WHITE
     private val sectorPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.FILL
     }
     private val dividerPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = dividerColor
+        color = "#DEB887".toColorInt()
         style = Paint.Style.STROKE
         strokeWidth = 12f
         strokeCap = Paint.Cap.ROUND
     }
     private val textPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = textColor
+        color = Color.WHITE
         textSize = 120f
         textAlign = Paint.Align.CENTER
         typeface = Typeface.create(Typeface.MONOSPACE, Typeface.BOLD)
@@ -93,5 +90,11 @@ class RouletteView @JvmOverloads constructor(
                 }
             }
         }
+    }
+
+    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+        val size = minOf(measuredWidth, measuredHeight)
+        setMeasuredDimension(size, size)
     }
 }

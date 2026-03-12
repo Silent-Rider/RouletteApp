@@ -25,13 +25,42 @@
             app:title="Рулетка Удачи"
             app:titleTextColor="@android:color/white" />
 
-
-        <com.example.rouletteapp.RouletteView
-            android:id="@+id/roulette"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="7dp" />
+            android:layout_height="match_parent">
 
+            <com.example.rouletteapp.RouletteView
+                android:id="@+id/roulette"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="7dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintVertical_bias="0.3"/>
+
+            <com.example.rouletteapp.PointerView
+                android:id="@+id/pointer"
+                android:layout_width="50dp"
+                android:layout_height="100dp"
+                android:layout_gravity="bottom|center_horizontal"
+                android:layout_marginTop="-17dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/roulette"/>
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="50dp"
+                android:text="@string/spin"
+                android:textSize="40sp"
+                android:paddingVertical="15dp"
+                app:layout_constraintTop_toBottomOf="@id/pointer"
+                android:layout_marginBottom="40dp"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>
 
     <com.google.android.material.navigation.NavigationView
@@ -43,6 +72,7 @@
         app:itemIconTint="@color/black"
         app:itemTextColor="@color/black"
         app:headerLayout="@layout/nav_header"
-        app:menu="@menu/activity_main_drawer" />
+        app:menu="@menu/activity_main_drawer"
+        tools:visibility="gone"/>
 
 </androidx.drawerlayout.widget.DrawerLayout>
