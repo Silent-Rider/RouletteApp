@@ -65,6 +65,9 @@ class MainActivity : AppCompatActivity() {
                 launch.isEnabled = true
                 launch.alpha = 1.0f
                 showResult(result)
+                if (result != "?") {
+                    binding.won.text = getString(R.string.won) + " " + getPriceName(result)
+                } else binding.won.text = getString(R.string.lose)
             }
         }
 
@@ -134,6 +137,20 @@ class MainActivity : AppCompatActivity() {
                     .start()
             }
             start()
+        }
+    }
+
+    private fun getPriceName(icon: String): String {
+        return when (icon) {
+            "💰" -> "монеты"
+            "🍌" -> "банан"
+            "🚀" -> "ракету"
+            "🎲" -> "кубик"
+            "🍒" -> "вишню"
+            "💎" -> "алмаз"
+            "\uD83C\uDF54" -> "бургер"
+            "\uD83C\uDFAE" -> "геймпад"
+            else -> "неизвестный предмет"
         }
     }
 

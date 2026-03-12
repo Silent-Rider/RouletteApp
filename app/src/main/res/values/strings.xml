@@ -7,4 +7,6 @@
     <string name="spin">Крутить</string>
     <string name="about_text">Программа была разработана студентами группы АПИМ-25 Клименко Кириллом и Бадаговым Андреем</string>
     <string name="ok">ОК</string>
+    <string name="won">Вы выиграли</string>
+    <string name="lose">Вы ничего не выиграли</string>
 </resources>

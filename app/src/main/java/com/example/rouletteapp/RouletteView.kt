@@ -6,7 +6,6 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Typeface
 import android.util.AttributeSet
-import android.util.Log
 import android.view.Choreographer
 import android.view.View
 import androidx.core.graphics.withRotation
@@ -63,13 +62,6 @@ class RouletteView @JvmOverloads constructor(
                 if (angularVelocity < 0.5f) {
                     angularVelocity = 0f
                     isSpinning = false
-
-                    val angleUnderPointer = ((90f - currentAngle) % 360f + 360f) % 360f
-                    val sectorAngle = 360f / sectorsCount
-                    val sectorIndex = (angleUnderPointer / sectorAngle).toInt() % sectorsCount
-                    Log.d("Roulette", "currentAngle=$currentAngle, angleUnderPointer=$angleUnderPointer, sectorIndex=$sectorIndex, icon=${icons[sectorIndex]}")
-
-
                     val result = calculateResultSector()
                     listener?.onRouletteFinished(result)
 
@@ -147,20 +139,12 @@ class RouletteView @JvmOverloads constructor(
     private fun calculateResultSector(): String {
         val sectorAngle = 360f / sectorsCount
 
-        val normalizedAngle = ((120f - currentAngle) % 360f + 360f) % 360f
+        val normalizedAngle = currentAngle % 360f
+        val pointerAngle = 90f
+        var angleOnWheel = pointerAngle - normalizedAngle
+        angleOnWheel = (angleOnWheel % 360f + 360f) % 360f
 
-        val drawOffset = 360f / sectorsCount * 1.5f
-        val adjustedAngle = ((normalizedAngle - drawOffset) % 360f + 360f) % 360f
-
-        val sectorIndex = (adjustedAngle / sectorAngle).toInt() % sectorsCount
-
-        val angleInSector = adjustedAngle % sectorAngle
-        val borderThreshold = 3f
-
-        if (angleInSector < borderThreshold || angleInSector > sectorAngle - borderThreshold) {
-            return "?"
-        }
-
+        val sectorIndex = (angleOnWheel / sectorAngle).toInt() % sectorsCount
         return icons[sectorIndex]
     }
 }
