@@ -16,7 +16,7 @@ class PointerView @JvmOverloads constructor(
 ): View(context, attrs, defStyleAttr) {
 
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = "#3D2B1F".toColorInt()
+        color = "#4C2F27".toColorInt()
         style = Paint.Style.FILL_AND_STROKE
         strokeWidth = 12f
         strokeCap = Paint.Cap.ROUND

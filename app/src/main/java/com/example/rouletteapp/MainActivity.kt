@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -61,9 +62,19 @@ class MainActivity : AppCompatActivity() {
         }
 
         launch.setOnClickListener {
-            val rand = (Random.nextFloat() * 1200f) + 300f
+            val rand = (Random.nextFloat() * 1000f) + 300f
             roulette.spin(rand)
             roulette.listener?.onRouletteStarted()
+        }
+
+        binding.navView.menu.getItem(0).setOnMenuItemClickListener {
+            AlertDialog.Builder(this)
+                .setTitle(getString(R.string.about_button))
+                .setMessage(getString(R.string.about_text))
+                .setPositiveButton(getString(R.string.ok)) { dialog, _ -> dialog.dismiss() }
+                .create()
+                .show()
+            return@setOnMenuItemClickListener true
         }
     }
 }
