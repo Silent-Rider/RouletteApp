@@ -1,11 +1,18 @@
 package com.example.rouletteapp
 
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
 import android.os.Bundle
+import android.view.Gravity
 import android.view.View
+import android.view.ViewGroup
+import android.view.animation.DecelerateInterpolator
+import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.animation.doOnEnd
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.rouletteapp.databinding.ActivityMainBinding
@@ -54,10 +61,10 @@ class MainActivity : AppCompatActivity() {
                 launch.alpha = 0.5f
             }
 
-            override fun onRouletteFinished(result: String?) {
+            override fun onRouletteFinished(result: String) {
                 launch.isEnabled = true
                 launch.alpha = 1.0f
-//                animateWinnerToCenter(resultValue)
+                showResult(result)
             }
         }
 
@@ -77,4 +84,57 @@ class MainActivity : AppCompatActivity() {
             return@setOnMenuItemClickListener true
         }
     }
+
+    private fun showResult(result: String){
+        if (result == "?") return
+        val roulette = binding.roulette
+
+        val rouletteLocation = IntArray(2)
+        roulette.getLocationOnScreen(rouletteLocation)
+        val rouletteCenterX = rouletteLocation[0] + roulette.width / 2f
+        val rouletteCenterY = rouletteLocation[1] + roulette.height / 2f
+
+        val winnerText = TextView(this).apply {
+            text = result
+            textSize = 40f
+            gravity = Gravity.CENTER
+        }
+
+        val rootView = window.decorView as ViewGroup
+        rootView.addView(winnerText, ViewGroup.LayoutParams(200, 200))
+
+        val startX = rouletteCenterX - 100f
+        val startY = rouletteLocation[1] + roulette.height - 200f
+
+        winnerText.x = startX
+        winnerText.y = startY
+        winnerText.scaleX = 0.5f
+        winnerText.scaleY = 0.5f
+        winnerText.alpha = 0f
+
+        val targetX = rouletteCenterX - 100f
+        val targetY = rouletteCenterY - 100f
+
+        AnimatorSet().apply {
+            playTogether(
+                ObjectAnimator.ofFloat(winnerText, "x", startX, targetX),
+                ObjectAnimator.ofFloat(winnerText, "y", startY, targetY),
+                ObjectAnimator.ofFloat(winnerText, "scaleX", 0.5f, 4f),
+                ObjectAnimator.ofFloat(winnerText, "scaleY", 0.5f, 4f),
+                ObjectAnimator.ofFloat(winnerText, "alpha", 0f, 1f)
+            )
+            duration = 800
+            interpolator = DecelerateInterpolator()
+            doOnEnd {
+                winnerText.animate()
+                    .alpha(0f)
+                    .setStartDelay(1000)
+                    .setDuration(400)
+                    .withEndAction { rootView.removeView(winnerText) }
+                    .start()
+            }
+            start()
+        }
+    }
+
 }

@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Typeface
 import android.util.AttributeSet
+import android.util.Log
 import android.view.Choreographer
 import android.view.View
 import androidx.core.graphics.withRotation
@@ -63,9 +64,15 @@ class RouletteView @JvmOverloads constructor(
                     angularVelocity = 0f
                     isSpinning = false
 
-//                    val result = calculateFinalSector()
-                    var result = null;
+                    val angleUnderPointer = ((90f - currentAngle) % 360f + 360f) % 360f
+                    val sectorAngle = 360f / sectorsCount
+                    val sectorIndex = (angleUnderPointer / sectorAngle).toInt() % sectorsCount
+                    Log.d("Roulette", "currentAngle=$currentAngle, angleUnderPointer=$angleUnderPointer, sectorIndex=$sectorIndex, icon=${icons[sectorIndex]}")
+
+
+                    val result = calculateResultSector()
                     listener?.onRouletteFinished(result)
+
                 }
             }
 
@@ -82,10 +89,6 @@ class RouletteView @JvmOverloads constructor(
         isSpinning = true
         lastFrameTime = 0L
         choreographer.postFrameCallback(frameCallback)
-    }
-
-    fun isSpinning(): Boolean {
-        return isSpinning
     }
 
     override fun onDraw(canvas: Canvas) {
@@ -129,7 +132,7 @@ class RouletteView @JvmOverloads constructor(
                 withRotation(startAngle + sectorAngle / 2) {
                     translate(radius * 0.85f, 0f)
                     rotate(270f)
-                    drawText(icons[i].toString(), 0f, 0f, textPaint)
+                    drawText(icons[i], 0f, 0f, textPaint)
                 }
             }
         }
@@ -139,5 +142,25 @@ class RouletteView @JvmOverloads constructor(
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
         val size = minOf(measuredWidth, measuredHeight)
         setMeasuredDimension(size, size)
+    }
+
+    private fun calculateResultSector(): String {
+        val sectorAngle = 360f / sectorsCount
+
+        val normalizedAngle = ((120f - currentAngle) % 360f + 360f) % 360f
+
+        val drawOffset = 360f / sectorsCount * 1.5f
+        val adjustedAngle = ((normalizedAngle - drawOffset) % 360f + 360f) % 360f
+
+        val sectorIndex = (adjustedAngle / sectorAngle).toInt() % sectorsCount
+
+        val angleInSector = adjustedAngle % sectorAngle
+        val borderThreshold = 3f
+
+        if (angleInSector < borderThreshold || angleInSector > sectorAngle - borderThreshold) {
+            return "?"
+        }
+
+        return icons[sectorIndex]
     }
 }
