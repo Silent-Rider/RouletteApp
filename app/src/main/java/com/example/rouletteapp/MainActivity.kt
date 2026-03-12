@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.rouletteapp.databinding.ActivityMainBinding
+import kotlin.random.Random
 
 class MainActivity : AppCompatActivity() {
 
@@ -29,6 +30,7 @@ class MainActivity : AppCompatActivity() {
         val drawer = binding.drawerLayout
         val roulette = binding.roulette
         val toolbar = binding.toolbar
+        val launch = binding.launch
 
         val actionBarDrawerToggle = object : ActionBarDrawerToggle(
             this,
@@ -44,5 +46,24 @@ class MainActivity : AppCompatActivity() {
 
         drawer.addDrawerListener(actionBarDrawerToggle)
         actionBarDrawerToggle.syncState()
+
+        roulette.listener = object : RouletteListener {
+            override fun onRouletteStarted() {
+                launch.isEnabled = false
+                launch.alpha = 0.5f
+            }
+
+            override fun onRouletteFinished(result: String?) {
+                launch.isEnabled = true
+                launch.alpha = 1.0f
+//                animateWinnerToCenter(resultValue)
+            }
+        }
+
+        launch.setOnClickListener {
+            val rand = (Random.nextFloat() * 1200f) + 300f
+            roulette.spin(rand)
+            roulette.listener?.onRouletteStarted()
+        }
     }
 }

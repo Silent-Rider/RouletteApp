@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Typeface
 import android.util.AttributeSet
+import android.view.Choreographer
 import android.view.View
 import androidx.core.graphics.withRotation
 import androidx.core.graphics.withTranslation
@@ -44,6 +45,48 @@ class RouletteView @JvmOverloads constructor(
         textAlign = Paint.Align.CENTER
         typeface = Typeface.create(Typeface.MONOSPACE, Typeface.BOLD)
     }
+    private var currentAngle = 0f
+    private var angularVelocity = 0f
+    private var isSpinning = false
+    private val choreographer = Choreographer.getInstance()
+    private var lastFrameTime = 0L
+    private val frameCallback = object : Choreographer.FrameCallback {
+        override fun doFrame(frameTimeNanos: Long) {
+            if (!isSpinning) return
+
+            if (lastFrameTime != 0L) {
+                val deltaSeconds = (frameTimeNanos - lastFrameTime) / 1_000_000_000f
+                currentAngle += angularVelocity * deltaSeconds
+                angularVelocity *= 0.98f // трение
+
+                if (angularVelocity < 0.5f) {
+                    angularVelocity = 0f
+                    isSpinning = false
+
+//                    val result = calculateFinalSector()
+                    var result = null;
+                    listener?.onRouletteFinished(result)
+                }
+            }
+
+            lastFrameTime = frameTimeNanos
+            invalidate()
+            choreographer.postFrameCallback(this)
+        }
+    }
+    var listener:RouletteListener? = null
+
+    fun spin(targetVelocity: Float) {
+        if (isSpinning) return
+        angularVelocity = targetVelocity.coerceIn(100f, 2000f)
+        isSpinning = true
+        lastFrameTime = 0L
+        choreographer.postFrameCallback(frameCallback)
+    }
+
+    fun isSpinning(): Boolean {
+        return isSpinning
+    }
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
@@ -58,7 +101,7 @@ class RouletteView @JvmOverloads constructor(
         val radius = minOf(width, height) / 2 - 10
 
         canvas.withTranslation(centerX, centerY) {
-            canvas.rotate(360f / sectorsCount * 1.5f)
+            canvas.rotate(currentAngle)
 
             val sectorAngle = 360f / sectorsCount
 
