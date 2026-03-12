@@ -2,4 +2,7 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="khaki">#F0E68C</color>
+    <color name="moccasin">#FFE4B5</color>
+    <color name="lemon_chiffon">#FFFACD</color>
 </resources>
