@@ -57,7 +57,7 @@ class RouletteView @JvmOverloads constructor(
             if (lastFrameTime != 0L) {
                 val deltaSeconds = (frameTimeNanos - lastFrameTime) / 1_000_000_000f
                 currentAngle += angularVelocity * deltaSeconds
-                angularVelocity *= 0.98f // трение
+                angularVelocity *= 0.9875f
 
                 if (angularVelocity < 0.5f) {
                     angularVelocity = 0f

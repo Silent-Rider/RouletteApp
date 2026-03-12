@@ -72,7 +72,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         launch.setOnClickListener {
-            val rand = (Random.nextFloat() * 1000f) + 300f
+            val rand = (Random.nextFloat() * 1000f) + 800f
             roulette.spin(rand)
             roulette.listener?.onRouletteStarted()
         }
