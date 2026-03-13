@@ -2,7 +2,6 @@ package com.example.rouletteapp
 
 import android.content.Context
 import android.graphics.Canvas
-import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Typeface
 import android.util.AttributeSet
@@ -39,8 +38,7 @@ class RouletteView @JvmOverloads constructor(
         strokeWidth = 12f
         strokeCap = Paint.Cap.ROUND
     }
-    private val textPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = Color.WHITE
+    private val iconPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         textSize = 120f
         textAlign = Paint.Align.CENTER
         typeface = Typeface.create(Typeface.MONOSPACE, Typeface.BOLD)
@@ -124,7 +122,7 @@ class RouletteView @JvmOverloads constructor(
                 withRotation(startAngle + sectorAngle / 2) {
                     translate(radius * 0.85f, 0f)
                     rotate(270f)
-                    drawText(icons[i], 0f, 0f, textPaint)
+                    drawText(icons[i], 0f, 0f, iconPaint)
                 }
             }
         }
